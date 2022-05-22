@@ -2,7 +2,7 @@ from BiliClient import asyncbili
 from .push_message_task import webhook
 import logging, asyncio, random
 
-async def coin_task(biliapi: asyncbili, 
+async def coin_task(biliapi: asyncbili,
                     task_config: dict
                     ) -> None:
 
@@ -20,18 +20,18 @@ async def coin_task(biliapi: asyncbili,
         webhook.addMsg('msg_simple', f'{biliapi.name}:硬币不足\n')
         return
 
-    try:
-        reward = (await biliapi.getReward())["data"]
-        #print(f'{biliapi.name}: 经验脚本开始前经验信息 ：{str(reward)}')
-    except Exception as e: 
-        logging.warning(f'{biliapi.name}: 获取账户经验信息异常，原因为{str(e)}，跳过投币')
-        webhook.addMsg('msg_simple', f'{biliapi.name}:投币失败\n')
-        return
+    # try:
+    #     reward = (await biliapi.getReward())["data"]
+    #     #print(f'{biliapi.name}: 经验脚本开始前经验信息 ：{str(reward)}')
+    # except Exception as e:
+    #     logging.warning(f'{biliapi.name}: 获取账户经验信息异常，原因为{str(e)}，跳过投币')
+    #     webhook.addMsg('msg_simple', f'{biliapi.name}:投币失败\n')
+    #     return
 
-    coin_exp_num = (target * 10 - reward["coins_av"]) // 10
-    toubi_num = coin_exp_num if coin_num > coin_exp_num else coin_num
-    toubi_num = int(toubi_num)
-    
+    # coin_exp_num = (target * 10 - reward["coins_av"]) // 10
+    # toubi_num = coin_exp_num if coin_num > coin_exp_num else coin_num
+    toubi_num = 5
+
     if toubi_num < 1:
         logging.info(f'{biliapi.name}: 不需要投币')
         return
@@ -140,7 +140,7 @@ async def get_relation_up(biliapi: asyncbili,
             logging.info(f'{biliapi.name}: 投币获取up主失败，信息为:{ret["message"]}')
             break
 
-async def get_up_video_ids(biliapi: asyncbili, 
+async def get_up_video_ids(biliapi: asyncbili,
                     upid: int,
                     num: int
                     ) -> int:
@@ -171,7 +171,7 @@ async def get_up_video_ids(biliapi: asyncbili,
             logging.info(f'{biliapi.name}: 投币获取up主{upid}的视频失败，信息为:{ret["message"]}')
             return
 
-async def get_up_article_ids(biliapi: asyncbili, 
+async def get_up_article_ids(biliapi: asyncbili,
                     upid: int,
                     num: int
                     ) -> int:
@@ -203,7 +203,7 @@ async def get_up_article_ids(biliapi: asyncbili,
             return
 
 search_order = ("", "click", "pubdate", "dm", "stow")
-async def get_search_video_ids(biliapi: asyncbili, 
+async def get_search_video_ids(biliapi: asyncbili,
                     keyword: str,
                     order: int = 0,
                     duration: int = 0,
@@ -233,7 +233,7 @@ async def get_search_video_ids(biliapi: asyncbili,
             logging.info(f'{biliapi.name}: 投币获取up主{upid}的视频失败，信息为:{ret["message"]}')
             return
 
-async def get_coin_aids(biliapi: asyncbili, 
+async def get_coin_aids(biliapi: asyncbili,
                     task_config: dict
                     ) -> int:
     '''按条件生成需要投币的稿件id，异步生成器'''
